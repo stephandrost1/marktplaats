@@ -1,0 +1,1 @@
+<img src="images/logo-groot.png" class="w-32">
