@@ -22,6 +22,6 @@ Route::get('/producten', function () {
     return view('products');
 })->name('producten');
 
-Route::get('/account-instellingen', [AccountController::class, 'index']);
+Route::get('/account-instellingen', [AccountController::class, 'index'])->name('account-instellingen');
 
 require __DIR__.'/auth.php';

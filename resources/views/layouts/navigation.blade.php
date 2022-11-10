@@ -44,7 +44,7 @@
     
                         <x-slot name="content">
                             <!-- Account Settings -->
-                            <x-dropdown-link>
+                            <x-dropdown-link href="{{ route('account-instellingen') }}">
                                 {{ __('Account Instellingen') }}
                             </x-dropdown-link>
     
@@ -102,7 +102,7 @@
 
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
-                    <x-responsive-nav-link>
+                    <x-responsive-nav-link href="{{ route('account-instellingen') }}">
                         {{ __('Account Instellingen') }}
                     </x-responsive-nav-link>
             </div>
