@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdvertisementController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AdvertisementController::class, 'index']);
 
-Route::get('/producten', function () {
-    return view('products');
-})->name('producten');
+Route::get('/advertenties', [AdvertisementController::class, 'index'])->name('advertenties');
 
-Route::get('/account-instellingen', [AccountController::class, 'index'])->name('account-instellingen');
+Route::get('/detail', [AdvertisementController::class, 'show'])->name('detail');
 
-require __DIR__.'/auth.php';
+Route::get('/plaats-advertentie', [AdvertisementController::class, 'create'])->name('plaats-advertentie');
+Route::post('/plaats-advertentie', [AdvertisementController::class, 'store']);
+
+Route::get('/mijn-advertenties', [AdvertisementController::class, 'ownAdvertisements'])->middleware('auth')->name('mijn-advertenties');
+
+Route::get('/account-instellingen', [AccountController::class, 'index'])->middleware('auth')->name('account-instellingen');
+
+
+// Route::post('/account-instellingen', [AccountController::class]);
+
+// Route::group(['middleware' => ['auth']]);
+
+require __DIR__ . '/auth.php';

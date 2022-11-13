@@ -19,9 +19,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name',
+        'prefix_name',
         'last_name',
         'email',
         'password',
+        'country',
+        'city',
+        'postal_code',
+        'street_name',
+        'house_number',
     ];
 
     /**
@@ -42,4 +48,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function userImage()
+    {
+        return $this->hasMany(UserImage::class);
+    }
+
+    public function advertisements()
+    {
+        return $this->hasMany(Advertisement::class);
+    }
 }

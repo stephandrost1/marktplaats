@@ -3,3 +3,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar-track
+{
+    background-color: #F7F7F6;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+}
+
+::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F7F7F6;
+}
+
+::-webkit-scrollbar-thumb
+{
+    background-color: #EEA766;
+	border-radius: 10px;	
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+}

@@ -5,18 +5,15 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('producten') }}">
+                    <a href="{{ route('advertenties') }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('producten')" :active="request()->routeIs('producten')">
-                        {{ __('Producten') }}
-                    </x-nav-link>
-                    <x-nav-link>
-                        {{ __('Test') }}
+                    <x-nav-link :href="route('advertenties')" :active="request()->routeIs('advertenties')">
+                        {{ __('Advertenties') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -32,7 +29,7 @@
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                <div>{{ substr(Auth::user()->last_name, 0, 1) }}. {{ Auth::user()->last_name }}</div>
+                                <div>{{ substr(Auth::user()->first_name, 0, 1) }}. {{ Auth::user()->last_name }}</div>
     
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -43,6 +40,11 @@
                         </x-slot>
     
                         <x-slot name="content">
+                            <!-- Mijn advertenties -->
+                            <x-dropdown-link href="{{ route('mijn-advertenties') }}">
+                                {{ __('Mijn Advertenties') }}
+                            </x-dropdown-link>
+
                             <!-- Account Settings -->
                             <x-dropdown-link href="{{ route('account-instellingen') }}">
                                 {{ __('Account Instellingen') }}
@@ -60,6 +62,12 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
+                </div>
+
+                <div class="hidden sm:flex gap-2 sm:items-center sm:ml-6 text-sm font-medium">
+                    <x-primary-button class="!bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0">
+                        <i class="fa-solid fa-thumbtack fa-rotate-by" style="--fa-rotate-angle: 330deg;"></i>&nbsp;{{ __('Plaats advertentie') }}
+                    </x-primary-button>
                 </div>
             </div>
             @else
@@ -83,11 +91,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('producten')" :active="request()->routeIs('producten')">
-                {{ __('Producten') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link>
-                {{ __('Test') }}
+            <x-responsive-nav-link :href="route('advertenties')" :active="request()->routeIs('advertenties')">
+                {{ __('Advertenties') }}
             </x-responsive-nav-link>
         </div>
 
@@ -96,15 +101,21 @@
 
             @if (Auth::user())
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ substr(Auth::user()->last_name, 0, 1) }}. {{ Auth::user()->last_name }}</div>
+                <div class="font-medium text-base text-gray-800">{{ substr(Auth::user()->first_name, 0, 1) }}. {{ Auth::user()->last_name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
-                <!-- Authentication -->
-                    <x-responsive-nav-link href="{{ route('account-instellingen') }}">
-                        {{ __('Account Instellingen') }}
-                    </x-responsive-nav-link>
+                <!-- Own advertisements -->
+                <x-responsive-nav-link href="{{ route('mijn-advertenties') }}">
+                    {{ __('Mijn Advertenties') }}
+                </x-responsive-nav-link>
+            </div>
+            <div class="mt-3 space-y-1">
+                <!-- Account settings -->
+                <x-responsive-nav-link href="{{ route('account-instellingen') }}">
+                    {{ __('Account Instellingen') }}
+                </x-responsive-nav-link>
             </div>
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->

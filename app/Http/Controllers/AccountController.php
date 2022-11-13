@@ -15,11 +15,11 @@ class AccountController extends Controller
      */
     public function index()
     {
-        // Return Account-settings page
+        $id = Auth::user()->id;
 
-        $user = Auth::user();
-
-        return view('auth.account-settings', $user);
+        return view('auth.account-settings', [
+            'user' => User::findOrFail($id)
+        ]);
     }
 
     /**
@@ -53,7 +53,11 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = Auth::user()->id;
+
+        $user->fill($request->post())->save();
+
+        return redirect()->route('account-instellingen')->with('success', 'Account is geupdate!');
     }
 
     /**
@@ -67,10 +71,9 @@ class AccountController extends Controller
         $user = User::find(Auth::user()->id);
 
         Auth::logout();
-    
+
         if ($user->delete()) {
-    
-             return view('producten');
+            return view('advertisements')->with('succes', 'Account is verwijderd!');
         }
     }
 }
