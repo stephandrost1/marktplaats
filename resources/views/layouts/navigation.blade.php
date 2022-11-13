@@ -51,7 +51,7 @@
                             </x-dropdown-link>
     
                             <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" class="m-0" action="{{ route('logout') }}">
                                 @csrf
     
                                 <x-dropdown-link :href="route('logout')"
@@ -65,9 +65,12 @@
                 </div>
 
                 <div class="hidden sm:flex gap-2 sm:items-center sm:ml-6 text-sm font-medium">
-                    <x-primary-button class="!bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0">
-                        <i class="fa-solid fa-thumbtack fa-rotate-by" style="--fa-rotate-angle: 330deg;"></i>&nbsp;{{ __('Plaats advertentie') }}
-                    </x-primary-button>
+                    <a href="{{ route('plaats-advertentie') }}">
+                        <x-primary-button class="!bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0">
+                            <i class="fa-solid fa-thumbtack fa-rotate-by" style="--fa-rotate-angle: 330deg;"></i>&nbsp;{{ __('Plaats advertentie') }}
+                        </x-primary-button>
+                    </a>
+                    
                 </div>
             </div>
             @else
@@ -105,6 +108,13 @@
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
+            
+            <div class="mt-3 space-y-1">
+                <!-- Own advertisements -->
+                <x-responsive-nav-link href="{{ route('plaats-advertentie') }}">
+                    {{ __('Plaats Advertentie') }}
+                </x-responsive-nav-link>
+            </div>
             <div class="mt-3 space-y-1">
                 <!-- Own advertisements -->
                 <x-responsive-nav-link href="{{ route('mijn-advertenties') }}">
