@@ -30,6 +30,11 @@
     }
 </style>
 
+<script>
+    // var images = JSON.parse("json_encode($advertisement->images)");
+    // {} om advertisement heen
+</script>
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -38,11 +43,15 @@
     </x-slot>
 
     <div class="py-12 items-center flex flex-col gap-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="w-11/12 lg:w-4/5 m-auto flex flex-col sm:flex-row gap-2">
-                <div class="flex flex-col gap-3 basis-10/12">
-                    <div class="basis-9/12 w-full flex flex-col lg:justify-between lg:space-x-10 lg:flex-row bg-white shadow p-4 rounded-lg items-center">
-                        <div class="relative basis-11/12 flex flex-col gap-2">
+        <div class="max-w-full xl:max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="w-11/12 lg:w-5/5 m-auto flex flex-col lg:flex-row gap-2">
+                <div class="flex flex-col gap-3 basis-9/12">
+                    <div class="w-full flex flex-col lg:justify-between lg:space-x-10 lg:flex-row bg-white shadow p-4 rounded-lg items-center">
+                        <div class="relative basis-full flex flex-col gap-2">
+                            <div class="flex items-center gap-5 mb-2">
+                                <div><i class="fa-solid fa-eye text-gray-600 opacity-50"></i>&nbsp; 42</div>
+                                <div><i class="fa-solid fa-heart text-gray-600 opacity-50"></i>&nbsp; 3</div>
+                            </div>
                             <div class="img-display">
                                 <div class="img-showcase">
                                   <img src="images/advertisements/2/1.jpg">
@@ -72,21 +81,44 @@
                         <div class="space-y-5 p-5">
                             <div class="flex items-center justify-between">
                                 <h4 class="text-xl font-semibold">Game Consoles</h4>
-                                <button class=" border border-white rounded-full hover:bg-white hover:text-red-600">
-                                    <i class="py-2 px-3 rounded-full shadow fa-regular fa-heart text-xl"></i>
-                                </button>
+                                <div class="flex gap-1">
+                                    <button class=" border border-white rounded-full hover:bg-white hover:text-red-600">
+                                        <i class="py-2 px-3 rounded-full shadow fa-regular fa-heart text-xl"></i>
+                                    </button>
+                                    <button class=" border border-white rounded-full hover:bg-white text-red-600 hover:text-black">
+                                        <i class="py-2 px-3 rounded-full shadow fa-solid fa-heart text-xl"></i>
+                                    </button>
+                                </div>
                             </div>
                             <h1 class="text-3xl font-bold">Xbox One S</h1>
-                            <h2 class="text-xl font-bold">€75,-</h2>
-                            <p class="text-sm font-semibold">Beschrijving</p>
-                            <p class="text-sm">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim quaerat accusantium, sed maiores deleniti, tenetur, dolores assumenda quibusdam quos ducimus est rerum eligendi?
-                            </p>
+                            <h2 class="text-xl font-bold flex gap-3 items-center">
+                                €75,- 
+                                <span class="bg-[#F7F7F6] text-xs rounded-md p-1">Ophalen of verzenden</span>
+                            </h2>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-sm font-bold">Beschrijving</p>
+                                <p class="text-sm">
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim quaerat accusantium, sed maiores deleniti, tenetur, dolores assumenda quibusdam quos ducimus est rerum eligendi?
+                                </p>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <p class="text-sm font-bold">Kenmerken</p>
+                                <div class="text-sm">
+                                    <div class="flex gap-1"> 
+                                        <div>Conditie <span class="font-bold text-[##EEA766]">:</span></div>
+                                        <div>Gebruikt</div>
+                                    </div>
+                                    <div>Opslagcapaciteit - 1 TB</div>
+                                    <div>Model - Xbox One S</div>
+                                    <div>Controllers - Met 1 controller</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="w-full flex items-center shadow p-4 rounded-lg bg-white">
                         <div class="w-full flex flex-col">
-                            <div class="relative basis-11/12 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="relative flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div class="flex gap-4">
                                     <div>
                                         <img src="images/users/john-doe.jpg" class="w-16 h-16 rounded-full"/>
@@ -99,7 +131,7 @@
         
                                 <div>
                                     <x-primary-button class="!bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0">
-                                        <i class="far fa-comments"></i>&nbsp;{{ __('Stuur een bericht') }}
+                                        <i class="fas fa-comments"></i>&nbsp;{{ __('Stuur een bericht') }}
                                     </x-primary-button>
                                 </div>
                             </div>
@@ -107,8 +139,87 @@
                     </div>
                 </div>
 
-                <div class="flex basis-2/12">
-                    Test
+                <div class="flex flex-col basis-3/12 bg-white shadow p-4 rounded-lg">
+                    <div>
+                        <h4 class="font-bold text-xl">Biedingen</h4>
+                    </div>
+                    <div class="mt-2">
+                        <div class="mb-2 relative">        
+                            <x-text-input id="bidding_amount" name="bidding_amount" class="block pl-7 mt-1 w-full" type="text" required />
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <span class="text-gray-500 sm:text-sm">€</span>
+                            </div>
+                        </div>
+                        <x-primary-button class="w-full whitespace-nowrap justify-center !bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0">
+                            <i class="fas fa-gavel"></i>&nbsp;{{ __('Plaats bod') }}
+                        </x-primary-button>
+                    </div>
+                    <div class="mt-4 overflow-auto">
+                        <div class="border border-t-[1px] border-gray-600 opacity-20"></div>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="truncate basis-2/6">Audrius Mosteika</span>
+                            <span class="truncate">€ 150,00</span>
+                            <span class="truncate">10 nov. '22</span>
+                            
+                        </div>
+                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+                    </div>
                 </div>
             </div>
         </div>

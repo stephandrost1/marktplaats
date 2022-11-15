@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AdvertisementController::class, 'index']);
+Route::get('/', function () {
+    return redirect('advertenties');
+});
 
 Route::get('/advertenties', [AdvertisementController::class, 'index'])->name('advertenties');
 
