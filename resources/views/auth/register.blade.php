@@ -25,7 +25,7 @@
                             <input type='file' name="profile_image" accept="image/*" id="profile_image" class="hidden" :multiple="multiple" :accept="accept" onchange="document.getElementById('preview_image').src = window.URL.createObjectURL(this.files[0])" />
                           </label>
                         </div>
-                      </div>
+                    </div>
                 </div>
 
                 <div>
@@ -67,22 +67,24 @@
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
         
-                    <!-- City -->
-                    <div class="mt-4">
-                        <x-input-label for="city" :value="__('Plaatsnaam')" />
-        
-                        <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city')" required />
-        
-                        <x-input-error :messages="$errors->get('city')" class="mt-2" />
-                    </div>
-        
-                    <!-- Postal Code -->
-                    <div class="mt-4">
-                        <x-input-label for="postal_code" :value="__('Postcode')" />
-        
-                        <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code" :value="old('postal_code')" required />
-        
-                        <x-input-error :messages="$errors->get('postal_code')" class="mt-2" />
+                    <div class="flex gap-5">
+                        <!-- City -->
+                        <div class="mt-4 basis-5/6">
+                            <x-input-label for="city" :value="__('Plaatsnaam')" />
+            
+                            <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city')" required />
+            
+                            <x-input-error :messages="$errors->get('city')" class="mt-2" />
+                        </div>
+            
+                        <!-- Postal Code -->
+                        <div class="mt-4">
+                            <x-input-label for="postal_code" :value="__('Postcode')" />
+            
+                            <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code" :value="old('postal_code')" required />
+            
+                            <x-input-error :messages="$errors->get('postal_code')" class="mt-2" />
+                        </div>
                     </div>
         
                     <div class="flex gap-5">
