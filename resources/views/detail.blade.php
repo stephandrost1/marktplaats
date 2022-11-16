@@ -44,13 +44,13 @@
 
     <div class="py-12 items-center flex flex-col gap-2">
         <div class="max-w-full xl:max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="w-11/12 lg:w-5/5 m-auto flex flex-col lg:flex-row gap-2">
-                <div class="flex flex-col gap-3 basis-9/12">
+            <div class="w-11/12 min-[920px]:flex-row lg:w-5/5 m-auto flex flex-col gap-2">
+                <div class="flex flex-col gap-3 basis-11/12">
                     <div class="w-full flex flex-col lg:justify-between lg:space-x-10 lg:flex-row bg-white shadow p-4 rounded-lg items-center">
-                        <div class="relative basis-full flex flex-col gap-2">
+                        <div class="relative basis-6/12 flex flex-col gap-2">
                             <div class="flex items-center gap-5 mb-2">
                                 <div><i class="fa-solid fa-eye text-gray-600 opacity-50"></i>&nbsp; {{ $advertisement[0]->page_views }}</div>
-                                <div><i class="fa-solid fa-heart text-gray-600 opacity-50"></i>&nbsp; 3</div>
+                                <div><i class="fa-solid fa-heart text-gray-600 opacity-50"></i>&nbsp; {{ count($advertisement[0]->favorites ) }}</div>
                             </div>
                             <div class="img-display">
                                 <div class="img-showcase">
@@ -78,7 +78,7 @@
                               </div>
                         </div>
     
-                        <div class="space-y-5 p-5">
+                        <div class="space-y-5 basis-6/12 w-full p-5">
                             <div class="flex items-center justify-between">
                                 <h4 class="text-xl font-semibold">Game Consoles</h4>
                                 <div class="flex gap-1">
@@ -110,7 +110,7 @@
                                         <tbody>
                                             @foreach($advertisement[0]->specifications as $specification )
                                                 <tr>
-                                                    <td class="w-14">{{$specification->specification_name}}</td>
+                                                    <td class="w-14 font-semibold">{{$specification->specification_name}}</td>
                                                     <td class="w-7 text-[#EEA7AA] font-bold">:</td>
                                                     <td>{{$specification->specification_value}}</td>
                                                 </tr>
@@ -126,7 +126,7 @@
                         <div class="w-full flex flex-col">
                             <div class="relative flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div class="flex gap-4">
-                                    <div>
+                                    <div class="w-16 h-16 rounded-full">
                                         <img src="/images/users/{{ $advertisement[0]->user->first_name }}-{{ $advertisement[0]->user->last_name}}.jpg" class="w-16 h-16 rounded-full"/>
                                     </div>
                                     <div class="flex flex-col justify-center gap-1">
@@ -145,7 +145,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col basis-3/12 bg-white shadow p-4 rounded-lg">
+                <div class="flex flex-col basis-1/12 bg-white shadow p-4 rounded-lg">
                     <div>
                         <h4 class="font-bold text-xl">Biedingen</h4>
                     </div>

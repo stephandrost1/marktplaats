@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
 use App\Models\advertisementImage;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -33,6 +34,15 @@ class AdvertisementController extends Controller
         $advertisements = Advertisement::all()->where('user_id', Auth::user()->id);
 
         return view('own-advertisements', [
+            'advertisements' => $advertisements,
+        ]);
+    }
+
+    public function favorites()
+    {
+        $advertisements = Favorite::all()->where('user_id', Auth::user()->id);
+
+        return view('favorites', [
             'advertisements' => $advertisements,
         ]);
     }
@@ -68,18 +78,16 @@ class AdvertisementController extends Controller
     {
         $advertisement = Advertisement::all()->where('id', $id);
 
-        Cookie::queue('Testing', 'Workingggg', 1);
-
-        // if(Cookie::get($id) != ''){
-        //     Cookie::queue($advertisement->id, '1', 60);
-        //     $advertisement->incrementReadCount();
-        // }
+        // Must set config/session.php 'secure' to false
+        if (Cookie::get($advertisement[0]->id) == '') {
+            Cookie::queue($advertisement[0]->id, '1', 1);
+            $advertisement[0]->page_views++;
+            $advertisement[0]->save();
+        }
 
         return view('detail', [
             'advertisement' => $advertisement,
         ]);
-
-        
     }
 
     /**
