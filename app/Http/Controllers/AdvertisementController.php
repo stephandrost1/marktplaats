@@ -6,6 +6,7 @@ use App\Models\Advertisement;
 use App\Models\advertisementImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class AdvertisementController extends Controller
 {
@@ -63,9 +64,22 @@ class AdvertisementController extends Controller
      * @param  \App\Models\Advertisement  $advertisement
      * @return \Illuminate\Http\Response
      */
-    public function show(Advertisement $advertisement)
+    public function show(Advertisement $advertisement, $id)
     {
-        return view('detail');
+        $advertisement = Advertisement::all()->where('id', $id);
+
+        Cookie::queue('Testing', 'Workingggg', 1);
+
+        // if(Cookie::get($id) != ''){
+        //     Cookie::queue($advertisement->id, '1', 60);
+        //     $advertisement->incrementReadCount();
+        // }
+
+        return view('detail', [
+            'advertisement' => $advertisement,
+        ]);
+
+        
     }
 
     /**

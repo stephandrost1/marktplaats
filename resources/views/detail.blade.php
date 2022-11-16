@@ -49,30 +49,30 @@
                     <div class="w-full flex flex-col lg:justify-between lg:space-x-10 lg:flex-row bg-white shadow p-4 rounded-lg items-center">
                         <div class="relative basis-full flex flex-col gap-2">
                             <div class="flex items-center gap-5 mb-2">
-                                <div><i class="fa-solid fa-eye text-gray-600 opacity-50"></i>&nbsp; 42</div>
+                                <div><i class="fa-solid fa-eye text-gray-600 opacity-50"></i>&nbsp; {{ $advertisement[0]->page_views }}</div>
                                 <div><i class="fa-solid fa-heart text-gray-600 opacity-50"></i>&nbsp; 3</div>
                             </div>
                             <div class="img-display">
                                 <div class="img-showcase">
-                                  <img src="images/advertisements/2/1.jpg">
-                                  <img src="images/advertisements/2/2.jpg">
-                                  <img src="images/advertisements/2/3.jpg">
+                                  <img src="../images/advertisements/2/1.jpg">
+                                  <img src="../images/advertisements/2/2.jpg">
+                                  <img src="../images/advertisements/2/3.jpg">
                                 </div>
                               </div>
                               <div class="img-select">
                                 <div class="img-item">
                                   <a href="#" data-id="1">
-                                    <img src="images/advertisements/2/1.jpg">
+                                    <img src="../images/advertisements/2/1.jpg">
                                   </a>
                                 </div>
                                 <div class="img-item">
                                   <a href="#" data-id="2">
-                                    <img src = "images/advertisements/2/2.jpg">
+                                    <img src = "../images/advertisements/2/2.jpg">
                                   </a>
                                 </div>
                                 <div class="img-item">
                                   <a href="#" data-id="3">
-                                    <img src="images/advertisements/2/3.jpg">
+                                    <img src="../images/advertisements/2/3.jpg">
                                   </a>
                                 </div>
                               </div>
@@ -90,7 +90,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <h1 class="text-3xl font-bold">Xbox One S</h1>
+                            <h1 class="text-3xl font-bold">{{ $advertisement[0]->name }}</h1>
                             <h2 class="text-xl font-bold flex gap-3 items-center">
                                 €75,- 
                                 <span class="bg-[#F7F7F6] text-xs rounded-md p-1">Ophalen of verzenden</span>
@@ -98,20 +98,26 @@
                             <div class="flex flex-col gap-1">
                                 <p class="text-sm font-bold">Beschrijving</p>
                                 <p class="text-sm">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim quaerat accusantium, sed maiores deleniti, tenetur, dolores assumenda quibusdam quos ducimus est rerum eligendi?
+                                    {{ $advertisement[0]->description }}
                                 </p>
                             </div>
 
                             <div class="flex flex-col gap-1">
                                 <p class="text-sm font-bold">Kenmerken</p>
                                 <div class="text-sm">
-                                    <div class="flex gap-1"> 
-                                        <div>Conditie <span class="font-bold text-[##EEA766]">:</span></div>
-                                        <div>Gebruikt</div>
-                                    </div>
-                                    <div>Opslagcapaciteit - 1 TB</div>
-                                    <div>Model - Xbox One S</div>
-                                    <div>Controllers - Met 1 controller</div>
+                                    
+                                    <table class="table-fixed">
+                                        <tbody>
+                                            @foreach($advertisement[0]->specifications as $specification )
+                                                <tr>
+                                                    <td class="w-14">{{$specification->specification_name}}</td>
+                                                    <td class="w-7 text-[#EEA7AA] font-bold">:</td>
+                                                    <td>{{$specification->specification_value}}</td>
+                                                </tr>
+                                            @endforeach                                          
+                                        </tbody>
+                                      </table>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -121,11 +127,11 @@
                             <div class="relative flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div class="flex gap-4">
                                     <div>
-                                        <img src="images/users/john-doe.jpg" class="w-16 h-16 rounded-full"/>
+                                        <img src="/images/users/{{ $advertisement[0]->user->first_name }}-{{ $advertisement[0]->user->last_name}}.jpg" class="w-16 h-16 rounded-full"/>
                                     </div>
                                     <div class="flex flex-col justify-center gap-1">
-                                        <h4 class="font-bold">Daan van Hell</h4>
-                                        <h4 class="font-semibold text-sm">Woudenberg, 3902GX</h4>
+                                        <h4 class="font-bold">{{ $advertisement[0]->user->first_name }} {{ $advertisement[0]->user->prefix_name}} {{ $advertisement[0]->user->last_name}}</h4>
+                                        <h4 class="font-semibold text-sm">{{ $advertisement[0]->user->city }}, {{ $advertisement[0]->user->postal_code }}</h4>
                                     </div>
                                 </div>
         

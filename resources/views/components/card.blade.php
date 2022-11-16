@@ -1,5 +1,5 @@
 <div class="relative mx-auto w-full">
-    <a href="#" class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
+    <a href="detail/{{ $advertisement->id }}" class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
       <div class="shadow p-4 rounded-lg bg-white">
         <div class="flex justify-center relative rounded-lg overflow-hidden h-52">
           <div class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
@@ -35,7 +35,7 @@
           <div class="flex items-center">
             <div class="relative">
               <div class="rounded-full w-6 h-6 md:w-8 md:h-8 bg-gray-200">
-                  <img class="rounded-full" src="images/users/{{ $advertisement->user->userImage[0]->path }}">
+                  <img class="rounded-full w-6 h-6 md:w-8 md:h-8" src="images/users/{{ $advertisement->user->userImage[0]->path }}">
               </div>
               <span class="absolute top-0 right-0 inline-block w-3 h-3 bg-primary-red rounded-full"></span>
             </div>

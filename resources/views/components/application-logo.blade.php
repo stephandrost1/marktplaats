@@ -1,1 +1,1 @@
-<img src="images/logo-groot.png" class="w-32">
+<img src="/images/logo-groot.png" class="w-32">

@@ -18,7 +18,7 @@
             @include('layouts.navigation')
 
             <!-- Page Heading -->
-            @if (!Request::is('account-instellingen') && !Request::is('plaats-advertentie') && !Request::is('detail'))
+            @if (!Request::is('account-instellingen') && !Request::is('plaats-advertentie') && !Request::is('detail/*'))
                 <header class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-center">
                         <div class="flex flex-wrap items-center justify-center gap-1 sm:gap-5">            

@@ -21,7 +21,9 @@ Route::get('/', function () {
 
 Route::get('/advertenties', [AdvertisementController::class, 'index'])->name('advertenties');
 
-Route::get('/detail', [AdvertisementController::class, 'show'])->name('detail');
+Route::get('/detail/{id}', [AdvertisementController::class, 'show'])->name('detail');
+
+
 
 Route::get('/plaats-advertentie', [AdvertisementController::class, 'create'])->name('plaats-advertentie');
 Route::post('/plaats-advertentie', [AdvertisementController::class, 'store']);
