@@ -23,19 +23,24 @@
         </div>
 
         <div class="grid grid-cols-2 grid-rows-2 gap-4 mt-8">
-          <p class="inline-flex flex-col xl:flex-row xl:items-center text-gray-800">
-            Staat:
-            <span class="mt-2 xl:mt-0">
-                Nieuw
-            </span>
-          </p>
+          <table class="table-fixed">
+            <tbody>
+                @foreach($advertisement->specifications as $specification)
+                    <tr>
+                        <td class="w-14">{{$specification->specification_name}}</td>
+                        <td class="w-7 text-[#EEA7AA] font-bold">:</td>
+                        <td>{{$specification->specification_value}}</td>
+                    </tr>
+                @endforeach                                          
+            </tbody>
+          </table>
         </div>
 
         <div class="grid grid-cols-2 mt-8">
           <div class="flex items-center">
             <div class="relative">
               <div class="rounded-full w-6 h-6 md:w-8 md:h-8 bg-gray-200">
-                  <img class="rounded-full w-6 h-6 md:w-8 md:h-8" src="images/users/{{ $advertisement->user->userImage[0]->path }}">
+                  <img class="rounded-full w-6 h-6 md:w-8 md:h-8" src="images/users/{{ $advertisement->user->path }}">
               </div>
               <span class="absolute top-0 right-0 inline-block w-3 h-3 bg-primary-red rounded-full"></span>
             </div>

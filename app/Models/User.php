@@ -21,6 +21,7 @@ class User extends Authenticatable
         'first_name',
         'prefix_name',
         'last_name',
+        'path',
         'email',
         'password',
         'country',
@@ -49,13 +50,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function userImage()
-    {
-        return $this->hasMany(UserImage::class);
-    }
-
     public function advertisements()
     {
         return $this->hasMany(Advertisement::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
     }
 }

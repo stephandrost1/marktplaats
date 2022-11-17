@@ -113,7 +113,7 @@
                                         <div class="py-3 center m-auto">
                                             <div class="bg-white px-4 py-5 rounded-lg shadow-lg text-center w-48">
                                               <div class="mb-4">
-                                                <img id="preview_image" class="w-24 h-24 max-w-lg mx-auto rounded-full object-cover object-center" src="images/users/{{ $user->userImage[0]->path }}" alt="Avatar Upload" />
+                                                <img id="preview_image" class="w-24 h-24 max-w-lg mx-auto rounded-full object-cover object-center" src="images/users/{{ $user->path }}" alt="Avatar Upload" />
                                               </div>
                                               <label class="cursor-pointer mt-6">
                                                 <span class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" >Profielfoto selecteren</span>

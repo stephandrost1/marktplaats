@@ -31,8 +31,27 @@
 </style>
 
 <script>
-    // var images = JSON.parse("json_encode($advertisement->images)");
-    // {} om advertisement heen
+    var favorite = document.getElementById('favorite_button');
+    if (favorite) {
+        favorite.addEventListener("click", favorite);
+    }
+   
+
+   function favorite() {
+        fetch("/favorite/post", {
+            headers: 
+            {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            method: "post",
+            body: JSON.stringify
+                ({
+                    ad_id: {{$advertisement->id}},
+                    user_id: {{Auth::user()->id}}
+                })
+            })
+        }
 </script>
 
 <x-app-layout>
@@ -44,53 +63,59 @@
 
     <div class="py-12 items-center flex flex-col gap-2">
         <div class="max-w-full xl:max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="w-11/12 lg:w-5/5 m-auto flex flex-col lg:flex-row gap-2">
-                <div class="flex flex-col gap-3 basis-9/12">
+            <div class="w-11/12 min-[920px]:flex-row lg:w-5/5 m-auto flex flex-col gap-2">
+                <div class="flex flex-col gap-3 basis-11/12">
                     <div class="w-full flex flex-col lg:justify-between lg:space-x-10 lg:flex-row bg-white shadow p-4 rounded-lg items-center">
-                        <div class="relative basis-full flex flex-col gap-2">
+                        <div class="relative basis-6/12 flex flex-col gap-2">
                             <div class="flex items-center gap-5 mb-2">
-                                <div><i class="fa-solid fa-eye text-gray-600 opacity-50"></i>&nbsp; {{ $advertisement[0]->page_views }}</div>
-                                <div><i class="fa-solid fa-heart text-gray-600 opacity-50"></i>&nbsp; 3</div>
+                                <div><i class="fa-solid fa-eye text-gray-600 opacity-50"></i>&nbsp; {{ $advertisement->page_views }}</div>
+                                <div><i class="fa-solid fa-heart text-gray-600 opacity-50"></i>&nbsp; {{ count($advertisement->favorites ) }}</div>
                             </div>
                             <div class="img-display">
                                 <div class="img-showcase">
-                                  <img src="../images/advertisements/2/1.jpg">
-                                  <img src="../images/advertisements/2/2.jpg">
-                                  <img src="../images/advertisements/2/3.jpg">
+                                  <img class="rounded-md" src="../images/advertisements/2/1.jpg">
+                                  <img class="rounded-md" src="../images/advertisements/2/2.jpg">
+                                  <img class="rounded-md" src="../images/advertisements/2/3.jpg">
                                 </div>
                               </div>
                               <div class="img-select">
                                 <div class="img-item">
                                   <a href="#" data-id="1">
-                                    <img src="../images/advertisements/2/1.jpg">
+                                    <img class="rounded-md" src="../images/advertisements/2/1.jpg">
                                   </a>
                                 </div>
                                 <div class="img-item">
                                   <a href="#" data-id="2">
-                                    <img src = "../images/advertisements/2/2.jpg">
+                                    <img class="rounded-md" src = "../images/advertisements/2/2.jpg">
                                   </a>
                                 </div>
                                 <div class="img-item">
                                   <a href="#" data-id="3">
-                                    <img src="../images/advertisements/2/3.jpg">
+                                    <img class="rounded-md" src="../images/advertisements/2/3.jpg">
                                   </a>
                                 </div>
                               </div>
                         </div>
+
+                        
     
-                        <div class="space-y-5 p-5">
+                        <div class="space-y-5 basis-6/12 w-full p-5">
                             <div class="flex items-center justify-between">
                                 <h4 class="text-xl font-semibold">Game Consoles</h4>
                                 <div class="flex gap-1">
-                                    <button class=" border border-white rounded-full hover:bg-white hover:text-red-600">
-                                        <i class="py-2 px-3 rounded-full shadow fa-regular fa-heart text-xl"></i>
-                                    </button>
-                                    <button class=" border border-white rounded-full hover:bg-white text-red-600 hover:text-black">
-                                        <i class="py-2 px-3 rounded-full shadow fa-solid fa-heart text-xl"></i>
-                                    </button>
+                                    
+                                    @if (in_array(Auth::user()->id, $favorites))
+                                        <button id="favorite_button" class=" border border-white rounded-full hover:bg-white text-red-600 hover:text-black">
+                                            <i class="py-2 px-3 rounded-full shadow fa-solid fa-heart text-xl"></i>
+                                        </button>
+                                    @else
+                                        <button id="favorite_button" class=" border border-white rounded-full hover:bg-white hover:text-red-600">
+                                            <i class="py-2 px-3 rounded-full shadow fa-regular fa-heart text-xl"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
-                            <h1 class="text-3xl font-bold">{{ $advertisement[0]->name }}</h1>
+                            <h1 class="text-3xl font-bold">{{ $advertisement->name }}</h1>
                             <h2 class="text-xl font-bold flex gap-3 items-center">
                                 €75,- 
                                 <span class="bg-[#F7F7F6] text-xs rounded-md p-1">Ophalen of verzenden</span>
@@ -98,7 +123,7 @@
                             <div class="flex flex-col gap-1">
                                 <p class="text-sm font-bold">Beschrijving</p>
                                 <p class="text-sm">
-                                    {{ $advertisement[0]->description }}
+                                    {{ $advertisement->description }}
                                 </p>
                             </div>
 
@@ -108,9 +133,9 @@
                                     
                                     <table class="table-fixed">
                                         <tbody>
-                                            @foreach($advertisement[0]->specifications as $specification)
+                                            @foreach($advertisement->specifications as $specification)
                                                 <tr>
-                                                    <td class="w-14">{{$specification->specification_name}}</td>
+                                                    <td class="w-14 font-semibold">{{$specification->specification_name}}</td>
                                                     <td class="w-7 text-[#EEA7AA] font-bold">:</td>
                                                     <td>{{$specification->specification_value}}</td>
                                                 </tr>
@@ -126,12 +151,12 @@
                         <div class="w-full flex flex-col">
                             <div class="relative flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div class="flex gap-4">
-                                    <div>
-                                        <img src="/images/users/{{ $advertisement[0]->user->first_name }}-{{ $advertisement[0]->user->last_name}}.jpg" class="w-16 h-16 rounded-full"/>
+                                    <div class="w-16 h-16 rounded-full">
+                                        <img src="/images/users/{{ $advertisement->user->first_name }}-{{ $advertisement->user->last_name}}.jpg" class="w-16 h-16 rounded-full"/>
                                     </div>
                                     <div class="flex flex-col justify-center gap-1">
-                                        <h4 class="font-bold">{{ $advertisement[0]->user->first_name }} {{ $advertisement[0]->user->prefix_name}} {{ $advertisement[0]->user->last_name}}</h4>
-                                        <h4 class="font-semibold text-sm">{{ $advertisement[0]->user->city }}, {{ $advertisement[0]->user->postal_code }}</h4>
+                                        <h4 class="font-bold">{{ $advertisement->user->first_name }} {{ $advertisement->user->prefix_name}} {{ $advertisement->user->last_name}}</h4>
+                                        <h4 class="font-semibold text-sm">{{ $advertisement->user->city }}, {{ $advertisement->user->postal_code }}</h4>
                                     </div>
                                 </div>
         
@@ -145,7 +170,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col basis-3/12 bg-white shadow p-4 rounded-lg">
+                <div class="flex flex-col basis-1/12 bg-white shadow p-4 rounded-lg">
                     <div>
                         <h4 class="font-bold text-xl">Biedingen</h4>
                     </div>

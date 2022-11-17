@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('prefix_name')->nullable();
             $table->string('last_name');
+            $table->string('path');
             $table->string('city');
             $table->string('postal_code');
             $table->string('street_name');

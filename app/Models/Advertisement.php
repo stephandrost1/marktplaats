@@ -9,11 +9,6 @@ class Advertisement extends Model
 {
     use HasFactory;
 
-    public function incrementReadCount() {
-        $this->page_views++;
-        return $this->save();
-    }
-
     public function categorie()
     {
         return $this->belongsTo(Categorie::class);
@@ -27,5 +22,15 @@ class Advertisement extends Model
     public function specifications()
     {
         return $this->hasMany(Specification::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
 }

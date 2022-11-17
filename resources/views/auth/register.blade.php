@@ -22,7 +22,7 @@
                           </div>
                           <label class="cursor-pointer mt-6">
                             <span class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150" >Profielfoto selecteren</span>
-                            <input type='file' name="profile_image" accept="image/*" id="profile_image" class="hidden" :multiple="multiple" :accept="accept" onchange="document.getElementById('preview_image').src = window.URL.createObjectURL(this.files[0])" />
+                            <input type='file' name="profile_image" accept="image/*" id="profile_image" class="hidden" :multiple="multiple" :accept="accept" onchange="document.getElementById('preview_image').src = window.URL.createObjectURL(this.files[0])" required />
                           </label>
                         </div>
                     </div>

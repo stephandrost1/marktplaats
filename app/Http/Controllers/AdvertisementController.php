@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
 use App\Models\advertisementImage;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -37,6 +38,15 @@ class AdvertisementController extends Controller
         ]);
     }
 
+    public function favorites()
+    {
+        $advertisements = Favorite::all()->where('user_id', Auth::user()->id);
+
+        return view('favorites', [
+            'advertisements' => $advertisements,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -66,20 +76,31 @@ class AdvertisementController extends Controller
      */
     public function show(Advertisement $advertisement, $id)
     {
-        $advertisement = Advertisement::all()->where('id', $id);
+        $advertisement = Advertisement::find($id);
 
-        Cookie::queue('Testing', 'Workingggg', 1);
+        $favorites = array_map(function($f) {
+            return $f['user_id'];
+        }, $advertisement->favorites->toArray());
 
-        // if(Cookie::get($id) != ''){
-        //     Cookie::queue($advertisement->id, '1', 60);
-        //     $advertisement->incrementReadCount();
-        // }
+        // Must set config/session.php 'secure' to false
+        if (Cookie::get($advertisement->id) == '') {
+            Cookie::queue($advertisement->id, '1', 1);
+            $advertisement->page_views++;
+            $advertisement->save();
+        }
 
         return view('detail', [
             'advertisement' => $advertisement,
+            'favorites' => $favorites,
         ]);
+    }
 
-        
+    public function favorite(Request $request) {
+
+        Favorite::create([
+            'advertisement_id' => $request->ad_id,
+            'user_id' => $request->user_id,
+        ]);
     }
 
     /**
