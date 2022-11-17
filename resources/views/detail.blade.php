@@ -108,7 +108,7 @@
                                     
                                     <table class="table-fixed">
                                         <tbody>
-                                            @foreach($advertisement[0]->specifications as $specification )
+                                            @foreach($advertisement[0]->specifications as $specification)
                                                 <tr>
                                                     <td class="w-14">{{$specification->specification_name}}</td>
                                                     <td class="w-7 text-[#EEA7AA] font-bold">:</td>
