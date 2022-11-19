@@ -52,6 +52,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <h4 class="mb-4 font-bold text-3xl">Advertentie plaatsen</h4>
             <div class="shadow p-4 rounded-lg bg-white">
                 <div>
                     <div>

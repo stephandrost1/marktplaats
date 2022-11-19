@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
 use App\Models\advertisementImage;
+use App\Models\Bid;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redirect;
 
 class AdvertisementController extends Controller
 {
@@ -16,12 +18,24 @@ class AdvertisementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $term = $request->term;
+        $advertisements = Advertisement::all();
+
         if (Auth::user()) {
-            $advertisements = Advertisement::all()->where('user_id', '!==', Auth::user()->id);
+            if ($term) {
+                $advertisements = $advertisements->where('user_id', '!==', Auth::user()->id);
+                $advertisements = $advertisements->where('name', 'LIKE', '%' . $term . '%');
+            } else {
+                $advertisements = $advertisements->where('user_id', '!==', Auth::user()->id);
+            }
         } else {
-            $advertisements = Advertisement::all();
+            if ($term) {
+                $advertisements = $advertisements->where('name', 'LIKE', '%' . $term . '%');
+            } else {
+                $advertisements = Advertisement::all();
+            }
         }
 
         return view('advertisements', [
@@ -38,12 +52,32 @@ class AdvertisementController extends Controller
         ]);
     }
 
+    public function favoriteAdd(Request $request)
+    {
+        $checkFavorite = Favorite::all();
+        $checkFavorite = $checkFavorite->where('user_id', '=', Auth::user()->id);
+        $checkFavorite = $checkFavorite->where('advertisement_id', '=', $request->ad_id)->first();
+
+        if ($checkFavorite) {
+            $checkFavorite->delete();
+
+            return response()->json('dislike');
+        } else {
+            Favorite::create([
+                'user_id' => Auth::user()->id,
+                'advertisement_id' => $request->ad_id,
+            ]);
+
+            return response()->json('like');
+        }
+    }
+
     public function favorites()
     {
-        $advertisements = Favorite::all()->where('user_id', Auth::user()->id);
+        $favorites = Favorite::all()->where('user_id', Auth::user()->id);
 
         return view('favorites', [
-            'advertisements' => $advertisements,
+            'favorites' => $favorites,
         ]);
     }
 
@@ -78,7 +112,7 @@ class AdvertisementController extends Controller
     {
         $advertisement = Advertisement::find($id);
 
-        $favorites = array_map(function($f) {
+        $favorites = array_map(function ($f) {
             return $f['user_id'];
         }, $advertisement->favorites->toArray());
 
@@ -95,12 +129,22 @@ class AdvertisementController extends Controller
         ]);
     }
 
-    public function favorite(Request $request) {
+    public function bid(Request $request, $id)
+    {
+        $new_bid = $request->bidding_amount;
+        $highest_bid = Bid::all()->where('advertisement_id', $id)->sortByDesc('bid')->first();
 
-        Favorite::create([
-            'advertisement_id' => $request->ad_id,
-            'user_id' => $request->user_id,
-        ]);
+        if (!$highest_bid || $new_bid > $highest_bid->bid) {
+            Bid::create([
+                'bid' => $new_bid,
+                'user_id' => Auth::user()->id,
+                'advertisement_id' => $id,
+            ]);
+
+            return Redirect::to('detail/' . $id)->withErrors(['succes' => 'Bod geplaatst!']);
+        } else {
+            return Redirect::to('detail/' . $id)->withErrors(['failed' => 'Bod moet hoger zijn dan het hoogste huidige bod!']);
+        }
     }
 
     /**

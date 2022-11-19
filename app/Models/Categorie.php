@@ -13,4 +13,9 @@ class Categorie extends Model
     {
         return $this->hasMany(Advertisement::class);
     }
+
+    public function favorite()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }

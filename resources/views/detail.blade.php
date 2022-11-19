@@ -1,3 +1,5 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <style>
     img{
     width: 100%;
@@ -31,27 +33,33 @@
 </style>
 
 <script>
-    var favorite = document.getElementById('favorite_button');
-    if (favorite) {
-        favorite.addEventListener("click", favorite);
-    }
-   
-
    function favorite() {
-        fetch("/favorite/post", {
-            headers: 
-            {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-            method: "post",
-            body: JSON.stringify
-                ({
-                    ad_id: {{$advertisement->id}},
-                    user_id: {{Auth::user()->id}}
-                })
-            })
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': "{{ csrf_token() }}"
         }
+    });
+
+    $.ajax( {
+        url:'/favorite',
+        method:'POST',
+        data: {
+            ad_id: '{{ $advertisement->id}}',
+        },
+        success: function( updated ) { 
+            if( updated ) { 
+                $(".favorite-buttons").load(" .favorite-buttons > *");
+                // Favorite counter updaten
+            }   
+        },  
+        fail: function() {
+            alert('NO');
+        }   
+    }); 
+    }
+
+
 </script>
 
 <x-app-layout>
@@ -69,7 +77,7 @@
                         <div class="relative basis-6/12 flex flex-col gap-2">
                             <div class="flex items-center gap-5 mb-2">
                                 <div><i class="fa-solid fa-eye text-gray-600 opacity-50"></i>&nbsp; {{ $advertisement->page_views }}</div>
-                                <div><i class="fa-solid fa-heart text-gray-600 opacity-50"></i>&nbsp; {{ count($advertisement->favorites ) }}</div>
+                                <div><i class="fa-solid fa-heart text-gray-600 opacity-50 "></i>&nbsp; <span class="favorite-counter">{{ count($advertisement->favorites ) }}</span></div>
                             </div>
                             <div class="img-display">
                                 <div class="img-showcase">
@@ -100,18 +108,20 @@
                         
     
                         <div class="space-y-5 basis-6/12 w-full p-5">
-                            <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-between favorite-buttons">
                                 <h4 class="text-xl font-semibold">Game Consoles</h4>
                                 <div class="flex gap-1">
-                                    
-                                    @if (in_array(Auth::user()->id, $favorites))
-                                        <button id="favorite_button" class=" border border-white rounded-full hover:bg-white text-red-600 hover:text-black">
-                                            <i class="py-2 px-3 rounded-full shadow fa-solid fa-heart text-xl"></i>
-                                        </button>
-                                    @else
-                                        <button id="favorite_button" class=" border border-white rounded-full hover:bg-white hover:text-red-600">
-                                            <i class="py-2 px-3 rounded-full shadow fa-regular fa-heart text-xl"></i>
-                                        </button>
+                                    @if (Auth::user() && Auth::user()->id !== $advertisement->user->id)
+                                        @if (Auth::user() && in_array(Auth::user()->id, $favorites))
+                                            <button onclick="favorite()" class=" border border-white rounded-full hover:bg-white text-red-600 hover:text-black">
+                                                <i class="py-2 px-3 rounded-full shadow fa-solid fa-heart text-xl"></i>
+                                            </button>
+                                        @elseif (Auth::user())
+                                            <button onclick="favorite()" class=" border border-white rounded-full hover:bg-white hover:text-red-600">
+                                                <i class="py-2 px-3 rounded-full shadow fa-regular fa-heart text-xl"></i>
+                                            </button>
+                                        @else 
+                                        @endif
                                     @endif
                                 </div>
                             </div>
@@ -141,7 +151,7 @@
                                                 </tr>
                                             @endforeach                                          
                                         </tbody>
-                                      </table>
+                                    </table>
                                     
                                 </div>
                             </div>
@@ -155,7 +165,46 @@
                                         <img src="/images/users/{{ $advertisement->user->first_name }}-{{ $advertisement->user->last_name}}.jpg" class="w-16 h-16 rounded-full"/>
                                     </div>
                                     <div class="flex flex-col justify-center gap-1">
-                                        <h4 class="font-bold">{{ $advertisement->user->first_name }} {{ $advertisement->user->prefix_name}} {{ $advertisement->user->last_name}}</h4>
+                                        <div class="flex gap-3 items-center">
+                                            <h4 class="font-bold">{{ $advertisement->user->first_name }} {{ $advertisement->user->prefix_name}} {{ $advertisement->user->last_name}}</h4>
+
+                                            <div class="flex gap-1 text-[#FFD700]">
+                                                @if ($advertisement->user->reviews)
+                                                    
+                                                    @foreach(range(1,5) as $i)
+                                                        <span class="fa-stack" style="width:1em">
+                                                            <i class="far fa-star fa-stack-1x"></i>
+                                                            @if($advertisement->user->reviews[0]->stars > 0)
+                                                                @if($advertisement->user->reviews[0]->stars >0.5)
+                                                                    <i class="fas fa-star fa-stack-1x"></i>
+                                                                @else
+                                                                    <i class="fas fa-star-half fa-stack-1x"></i>
+                                                                @endif
+                                                            @endif
+                                                            @php $advertisement->user->reviews[0]->stars--; @endphp
+                                                        </span>
+                                                    @endforeach
+                                                 
+                                                @else
+
+                                                <span class="fa-stack" style="width:1em">
+                                                    <i class="far fa-star fa-stack-1x"></i>
+                                                </span><span class="fa-stack" style="width:1em">
+                                                    <i class="far fa-star fa-stack-1x"></i>
+                                                </span><span class="fa-stack" style="width:1em">
+                                                    <i class="far fa-star fa-stack-1x"></i>
+                                                </span><span class="fa-stack" style="width:1em">
+                                                    <i class="far fa-star fa-stack-1x"></i>
+                                                </span><span class="fa-stack" style="width:1em">
+                                                    <i class="far fa-star fa-stack-1x"></i>
+                                                </span>
+
+                                                @endif
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        
                                         <h4 class="font-semibold text-sm">{{ $advertisement->user->city }}, {{ $advertisement->user->postal_code }}</h4>
                                     </div>
                                 </div>
@@ -170,86 +219,40 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col basis-1/12 bg-white shadow p-4 rounded-lg">
+                <div class="flex flex-col basis-1/12 bg-white shadow p-4 rounded-lg min-w-fit">
                     <div>
                         <h4 class="font-bold text-xl">Biedingen</h4>
                     </div>
-                    <div class="mt-2">
+                    <form class="mt-2 mb-0" method="POST">
+                        @csrf
                         <div class="mb-2 relative">        
-                            <x-text-input id="bidding_amount" name="bidding_amount" class="block pl-7 mt-1 w-full" type="text" required />
+                            <x-text-input :disabled="!Auth::user() || $advertisement->id == Auth::user()->id" id="bidding_amount" name="bidding_amount" class="block pl-7 mt-1 w-full" type="text" required/>
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                 <span class="text-gray-500 sm:text-sm">€</span>
                             </div>
                         </div>
-                        <x-primary-button class="w-full whitespace-nowrap justify-center !bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0">
+                        <x-primary-button :disabled="!Auth::user() || $advertisement->id == Auth::user()->id" class="w-full whitespace-nowrap justify-center !bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0" type="submit">
                             <i class="fas fa-gavel"></i>&nbsp;{{ __('Plaats bod') }}
                         </x-primary-button>
-                    </div>
-                    <div class="mt-4 overflow-auto">
+                        @if($errors->has('succes'))
+                            <x-input-error messages="Bod geplaatst!" class="mt-2 !text-green-600 text-center font-bold" />   
+                        @endif
+                        @if($errors->has('failed'))
+                            <x-input-error messages="Bod moet hoger zijn dan huidige hoogste bod!" class="mt-2 text-center font-bold" />
+                        @endif
+                    </form>
+                    <div class="mt-4 overflow-auto min-w-fit">
                         <div class="border border-t-[1px] border-gray-600 opacity-20"></div>
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+                        
+                        @foreach ($advertisement->bids as $bid)
+                            <div class="mt-3 grid grid-cols-3 gap-4">
+                                <div class="truncate text-center">{{ $bid->user->first_name }} {{ $bid->user->prefix_name }} {{ $bid->user->last_name }}</div>
+                                <div class="text-center">€ {{ preg_replace('/\.(\d{3})/', ',$1', $bid->bid) }}</div>
+                                <div class="text-center">{{ \Carbon\Carbon::parse($bid->created_at)->isoFormat("D MMM 'YY") }}</div>
+                            </div>
+                            <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
+                        @endforeach
 
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
-
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
-
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
-
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
-
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
-
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
-
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="truncate basis-2/6">Audrius Mosteika</span>
-                            <span class="truncate">€ 150,00</span>
-                            <span class="truncate">10 nov. '22</span>
-                            
-                        </div>
-                        <div class="border border-t-[1px] border-gray-600 opacity-20 mt-3"></div>
                     </div>
                 </div>
             </div>

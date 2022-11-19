@@ -33,4 +33,9 @@ class Advertisement extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function bids()
+    {
+        return $this->hasMany(Bid::class)->orderby('bid', 'desc');
+    }
 }

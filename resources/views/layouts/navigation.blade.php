@@ -45,6 +45,11 @@
                                 {{ __('Mijn Advertenties') }}
                             </x-dropdown-link>
 
+                            <!-- Mijn favorieten -->
+                            <x-dropdown-link href="{{ route('mijn-favorieten') }}">
+                                {{ __('Mijn Favorieten') }}
+                            </x-dropdown-link>
+
                             <!-- Account Settings -->
                             <x-dropdown-link href="{{ route('account-instellingen') }}">
                                 {{ __('Account Instellingen') }}
@@ -119,6 +124,12 @@
                 <!-- Own advertisements -->
                 <x-responsive-nav-link href="{{ route('mijn-advertenties') }}">
                     {{ __('Mijn Advertenties') }}
+                </x-responsive-nav-link>
+            </div>
+            <div class="mt-3 space-y-1">
+                <!-- Own advertisements -->
+                <x-responsive-nav-link href="{{ route('mijn-favorieten') }}">
+                    {{ __('Mijn Favorieten') }}
                 </x-responsive-nav-link>
             </div>
             <div class="mt-3 space-y-1">

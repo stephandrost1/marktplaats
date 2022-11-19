@@ -20,18 +20,21 @@ Route::get('/', function () {
 });
 
 Route::get('/advertenties', [AdvertisementController::class, 'index'])->name('advertenties');
+Route::post('/advertenties', [AdvertisementController::class, 'index']);
 
 Route::get('/detail/{id}', [AdvertisementController::class, 'show'])->name('detail');
+Route::post('/detail/{id}', [AdvertisementController::class, 'bid']);
+
+
+Route::post('/favorite', [AdvertisementController::class, 'favoriteAdd']);
 
 
 
 Route::get('/plaats-advertentie', [AdvertisementController::class, 'create'])->name('plaats-advertentie');
 Route::post('/plaats-advertentie', [AdvertisementController::class, 'store']);
 
-
-Route::post('/favorite/post', [AdvertisementController::class, 'favorite']);
-
 Route::get('/mijn-advertenties', [AdvertisementController::class, 'ownAdvertisements'])->middleware('auth')->name('mijn-advertenties');
+
 Route::get('/mijn-favorieten', [AdvertisementController::class, 'favorites'])->middleware('auth')->name('mijn-favorieten');
 
 Route::get('/account-instellingen', [AccountController::class, 'index'])->middleware('auth')->name('account-instellingen');
