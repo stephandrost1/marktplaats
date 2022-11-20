@@ -105,7 +105,7 @@
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="@if(Auth::user()) pt-4 @else pt-2 @endif pb-1 border-t border-gray-200">
+        <div class="@if(Auth::user()) pt-4 @else @endif pb-1 border-t border-gray-200">
 
             @if (Auth::user())
             <div class="px-4">

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Bid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class BidController extends Controller
 {
@@ -21,10 +20,10 @@ class BidController extends Controller
                 'advertisement_id' => $id,
             ]);
 
-            session()->flash('succesMsg', 'Bod is geplaatst');
+            session()->flash('succesMsg', 'Je bod is geplaatst!');
             return redirect('detail/' . $id);
         } else {
-            session()->flash('failedMsg', 'Bod moet hoger zijn dan het huidige hoogste bod');
+            session()->flash('failedMsg', 'Bod moet hoger zijn dan het huidige hoogste bod!');
             return redirect('detail/' . $id);
         }
     }

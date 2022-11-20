@@ -200,7 +200,7 @@
                                         <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required />
                         
                                         <x-input-error id="password" :messages="$errors->get('password')" class="mt-2" />
-                                        <i id="passwordIcon_current" class="fas fa-eye password-icon" onclick="togglePasswordVisibility(3)"></i>
+                                        <i id="passwordIcon" class="fas fa-eye password-icon" onclick="togglePasswordVisibility(3)"></i>
                                     </div>
                                     @if($errors->has('failed'))
                                         <x-input-error messages="Het ingevoerde wachtwoord is onjuist!" class="mt-2 text-center font-bold" />

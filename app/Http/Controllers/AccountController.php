@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Advertisement;
-use App\Models\Bid;
-use App\Models\Favorite;
-use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 
 class AccountController extends Controller
 {
@@ -55,7 +50,7 @@ class AccountController extends Controller
         $user = Auth::user();
 
         if (!Hash::check($request->password, $user->password)) {
-            session()->flash('failedMsg', 'Het ingevoerde wachtwoord is onjuist');
+            session()->flash('failedMsg', 'Het ingevoerde wachtwoord is onjuist!');
 
             return view('edit-profile', [
                 'user' => User::findOrFail($user->id)
@@ -65,6 +60,26 @@ class AccountController extends Controller
 
             if ($request->profile_image && File::exists(public_path('images/users/' . Auth::user()->path))) {
                 File::delete(public_path('images/users/' . Auth::user()->path));
+            }
+
+            if ($request->new_password && $request->confirm_new_password) {
+                if ($request->new_password == $request->confirm_new_password) {
+                    $user->update([
+                        'password' => Hash::make($request->new_password),
+                    ]);
+                } else {
+                    session()->flash('failedMsg', 'De wachtwoorden komen niet overeen!');
+                    return view('edit-profile', [
+                        'user' => User::findOrFail($user->id)
+                    ]);
+                }
+            }
+
+            if (!$request->new_password && $request->confirm_new_password || $request->new_password && !$request->confirm_new_password) {
+                session()->flash('failedMsg', 'Vul beide wachtwoord velden in!');
+                return view('edit-profile', [
+                    'user' => User::findOrFail($user->id)
+                ]);
             }
 
             $user->update([
@@ -87,7 +102,7 @@ class AccountController extends Controller
                 ]);
             }
 
-            session()->flash('succesMsg', 'Je profiel is succesvol geüpdate');
+            session()->flash('succesMsg', 'Je profiel is succesvol geüpdate!');
             return redirect('mijn-profiel');
         }
     }
@@ -104,7 +119,7 @@ class AccountController extends Controller
         Auth::logout();
 
         if ($user->delete()) {
-            session()->flash('succesMsg', 'Je account is succesvol verwijdert');
+            session()->flash('succesMsg', 'Je account is succesvol verwijdert!');
             return redirect('/advertenties');
         }
     }

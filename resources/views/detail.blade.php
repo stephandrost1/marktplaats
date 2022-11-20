@@ -1,5 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 <style>
     img{
     width: 100%;
@@ -50,7 +48,6 @@
         success: function( updated ) { 
             if( updated ) { 
                 $(".favorite-buttons").load(" .favorite-buttons > *");
-                // Favorite counter updaten
             }   
         },  
         fail: function() {
@@ -69,12 +66,13 @@
         </h2>
     </x-slot>
 
-    {{-- @if(session()->has('succesMsg')) --}}
+    @if(session()->has('succesMsg'))
         <x-succes-flash-message></x-succes-flash-message>
-    {{-- @endif --}}
+    @endif
     @if(session()->has('failedMsg'))
         <x-failed-flash-message></x-failed-flash-message>
     @endif
+    
 
     <div class="py-12 items-center flex flex-col gap-2">
         <div class="max-w-full xl:max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -169,7 +167,7 @@
                             <div class="relative flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div class="flex gap-4">
                                     <div class="w-16 h-16 rounded-full">
-                                        <img src="/images/users/{{ $advertisement->user->first_name }}-{{ $advertisement->user->last_name}}.jpg" class="w-16 h-16 rounded-full"/>
+                                        <img src="/images/users/{{ $advertisement->user->path }}" class="w-16 h-16 rounded-full"/>
                                     </div>
                                     <div class="flex flex-col justify-center gap-1">
                                         <div class="flex flex-col">
