@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\ownAdvertismentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,22 +27,19 @@ Route::post('/advertenties', [AdvertisementController::class, 'index']);
 Route::get('/detail/{id}', [AdvertisementController::class, 'show'])->name('detail');
 Route::post('/detail/{id}', [AdvertisementController::class, 'bid']);
 
+Route::get('/mijn-advertenties', [ownAdvertismentController::class, 'index'])->middleware('auth')->name('mijn-advertenties');
 
-Route::post('/favorite', [AdvertisementController::class, 'favoriteAdd']);
+Route::get('/mijn-favorieten', [FavoriteController::class, 'index'])->middleware('auth')->name('mijn-favorieten');
+Route::post('/favorite', [FavoriteController::class, 'toggleFavorite']);
 
+Route::get('/mijn-profiel', [AccountController::class, 'index'])->middleware('auth')->name('mijn-profiel');
 
+Route::get('/profiel-bewerken', [AccountController::class, 'edit'])->middleware('auth')->name('profiel-bewerken');
+Route::post('/profiel-bewerken', [AccountController::class, 'update'])->middleware('auth');
 
 Route::get('/plaats-advertentie', [AdvertisementController::class, 'create'])->name('plaats-advertentie');
 Route::post('/plaats-advertentie', [AdvertisementController::class, 'store']);
 
-Route::get('/mijn-advertenties', [AdvertisementController::class, 'ownAdvertisements'])->middleware('auth')->name('mijn-advertenties');
 
-Route::get('/mijn-favorieten', [AdvertisementController::class, 'favorites'])->middleware('auth')->name('mijn-favorieten');
-
-Route::get('/account-instellingen', [AccountController::class, 'index'])->middleware('auth')->name('account-instellingen');
-
-// Route::post('/account-instellingen', [AccountController::class]);
-
-// Route::group(['middleware' => ['auth']]);
 
 require __DIR__ . '/auth.php';

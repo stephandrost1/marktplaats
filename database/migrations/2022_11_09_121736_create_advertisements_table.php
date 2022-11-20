@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('price');
-            $table->unsignedBigInteger('categorie_id')->nullable();
+            $table->enum('sending_type', ['Ophalen of verzenden', 'Ophalen', 'Verzenden']);
+            $table->$table->unsignedBigInteger('categorie_id')->nullable();
             $table->foreign('categorie_id')->references('id')->on('categories');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');

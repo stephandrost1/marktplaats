@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class AccountController extends Controller
 {
@@ -17,9 +19,19 @@ class AccountController extends Controller
     {
         $id = Auth::user()->id;
 
-        return view('auth.account-settings', [
+        return view('profile', [
             'user' => User::findOrFail($id)
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -45,19 +57,48 @@ class AccountController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit()
+    {
+        $id = Auth::user()->id;
+
+        return view('edit-profile', [
+            'user' => User::findOrFail($id)
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = Auth::user()->id;
+        $user = Auth::user();
 
-        $user->fill($request->post())->save();
+        if (!Hash::check($request->password, $user->password)) {
+            return Redirect::to('profiel-bewerken')->withErrors(['failed' => 'Wachtwoord is onjuist!']);
+        } else {
+            $user = User::find($user->id);
 
-        return redirect()->route('account-instellingen')->with('success', 'Account is geupdate!');
+            $user->update([
+                'first_name' => $request->first_name,
+                'prefix_name' => $request->prefix_name,
+                'last_name' => $request->last_name,
+                'city' => $request->city,
+                'postal_code' => $request->postal_code,
+                'street_name' => $request->street_name,
+                'house_number' => $request->house_number,
+            ]);
+
+            return Redirect::to('mijn-profiel')->withErrors(['succes' => 'Profiel is geüpdate!']);
+        }
     }
 
     /**

@@ -51,8 +51,8 @@
                             </x-dropdown-link>
 
                             <!-- Account Settings -->
-                            <x-dropdown-link href="{{ route('account-instellingen') }}">
-                                {{ __('Account Instellingen') }}
+                            <x-dropdown-link href="{{ route('mijn-profiel') }}">
+                                {{ __('Mijn Profiel') }}
                             </x-dropdown-link>
     
                             <!-- Authentication -->
@@ -134,8 +134,8 @@
             </div>
             <div class="mt-3 space-y-1">
                 <!-- Account settings -->
-                <x-responsive-nav-link href="{{ route('account-instellingen') }}">
-                    {{ __('Account Instellingen') }}
+                <x-responsive-nav-link href="{{ route('mijn-profiel') }}">
+                    {{ __('Mijn Profiel') }}
                 </x-responsive-nav-link>
             </div>
             <div class="mt-3 space-y-1">

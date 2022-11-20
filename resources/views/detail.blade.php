@@ -169,19 +169,19 @@
                                             <h4 class="font-bold">{{ $advertisement->user->first_name }} {{ $advertisement->user->prefix_name}} {{ $advertisement->user->last_name}}</h4>
 
                                             <div class="flex gap-1 text-[#FFD700]">
-                                                @if ($advertisement->user->reviews)
+                                                @if ($advertisement->user->review)
                                                     
                                                     @foreach(range(1,5) as $i)
                                                         <span class="fa-stack" style="width:1em">
                                                             <i class="far fa-star fa-stack-1x"></i>
-                                                            @if($advertisement->user->reviews[0]->stars > 0)
-                                                                @if($advertisement->user->reviews[0]->stars >0.5)
+                                                            @if($advertisement->user->review->stars > 0)
+                                                                @if($advertisement->user->review->stars >0.5)
                                                                     <i class="fas fa-star fa-stack-1x"></i>
                                                                 @else
                                                                     <i class="fas fa-star-half fa-stack-1x"></i>
                                                                 @endif
                                                             @endif
-                                                            @php $advertisement->user->reviews[0]->stars--; @endphp
+                                                            @php $advertisement->user->review->stars--; @endphp
                                                         </span>
                                                     @endforeach
                                                  

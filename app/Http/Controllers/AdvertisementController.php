@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Advertisement;
 use App\Models\advertisementImage;
 use App\Models\Bid;
-use App\Models\Favorite;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -20,19 +20,28 @@ class AdvertisementController extends Controller
      */
     public function index(Request $request)
     {
+        $categories = Categorie::all();
+
         $term = $request->term;
-        $advertisements = Advertisement::all();
+        $categorie = $request->categorie;
 
         if (Auth::user()) {
-            if ($term) {
-                $advertisements = $advertisements->where('user_id', '!==', Auth::user()->id);
-                $advertisements = $advertisements->where('name', 'LIKE', '%' . $term . '%');
+            if ($term && $categorie) {
+                $advertisements = Advertisement::where('user_id', '!=', Auth::user()->id)->where('name', 'LIKE', "%$term%")->where('categorie_id', $categorie)->get();
+            } elseif (!$term && $categorie) {
+                $advertisements = Advertisement::where('user_id', '!=', Auth::user()->id)->where('categorie_id', $categorie)->get();
+            } elseif ($term && !$categorie) {
+                $advertisements = Advertisement::where('user_id', '!=', Auth::user()->id)->where('name', 'LIKE', "%$term%")->get();
             } else {
-                $advertisements = $advertisements->where('user_id', '!==', Auth::user()->id);
+                $advertisements = Advertisement::where('user_id', '!=', Auth::user()->id)->get();
             }
         } else {
-            if ($term) {
-                $advertisements = $advertisements->where('name', 'LIKE', '%' . $term . '%');
+            if ($term && $categorie) {
+                $advertisements = Advertisement::where('name', 'LIKE', "%$term%")->where('categorie_id', $categorie)->get();
+            } elseif (!$term && $categorie) {
+                $advertisements = Advertisement::where('categorie_id', $categorie)->get();
+            } elseif ($term && !$categorie) {
+                $advertisements = Advertisement::where('name', 'LIKE', "%$term%")->get();
             } else {
                 $advertisements = Advertisement::all();
             }
@@ -40,44 +49,7 @@ class AdvertisementController extends Controller
 
         return view('advertisements', [
             'advertisements' => $advertisements,
-        ]);
-    }
-
-    public function ownAdvertisements()
-    {
-        $advertisements = Advertisement::all()->where('user_id', Auth::user()->id);
-
-        return view('own-advertisements', [
-            'advertisements' => $advertisements,
-        ]);
-    }
-
-    public function favoriteAdd(Request $request)
-    {
-        $checkFavorite = Favorite::all();
-        $checkFavorite = $checkFavorite->where('user_id', '=', Auth::user()->id);
-        $checkFavorite = $checkFavorite->where('advertisement_id', '=', $request->ad_id)->first();
-
-        if ($checkFavorite) {
-            $checkFavorite->delete();
-
-            return response()->json('dislike');
-        } else {
-            Favorite::create([
-                'user_id' => Auth::user()->id,
-                'advertisement_id' => $request->ad_id,
-            ]);
-
-            return response()->json('like');
-        }
-    }
-
-    public function favorites()
-    {
-        $favorites = Favorite::all()->where('user_id', Auth::user()->id);
-
-        return view('favorites', [
-            'favorites' => $favorites,
+            'categories' => $categories,
         ]);
     }
 
