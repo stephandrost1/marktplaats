@@ -12,7 +12,7 @@
     }
 </script>
 
-<x-app-layout>
+<x-app-layout class="relative">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Mijn Profiel') }}
@@ -41,9 +41,8 @@
                 </div>
               </div>
               <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                <form class="m-0" action="{{ route('mijn-profiel') }}" method="POST">
+                <form class="m-0" method="POST">
                     @csrf
-                    @method('post')
 
                     <button type="submit" class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">Verwijderen</button>
                 </form>
@@ -53,8 +52,10 @@
           </div>
         </div>
     </div>
-
-    <x-input-error messages="Profiel is succesvol geüpdate!" class="p-2 bg-green-300 !text-green-600 text-center font-bold" /> 
+    
+    @if(session()->has('succesMsg'))
+        <x-succes-flash-message></x-succes-flash-message>
+    @endif
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -75,10 +76,6 @@
                     </div>
 
                     <div class="mt-2">
-                        <form method="POST">
-                            @csrf
-                            @method('PUT')
-
                             <div class="block sm:flex items-center gap-5">
 
                                 <div>
@@ -107,19 +104,25 @@
                                                         <span class="text-sm text-black whitespace-nowrap">({{ $user->review->vote_amount }} stemmen)</span>
                                                  
                                                     @else
-
-                                                        <span class="fa-stack" style="width:1em">
-                                                            <i class="far fa-star fa-stack-1x"></i>
-                                                        </span><span class="fa-stack" style="width:1em">
-                                                            <i class="far fa-star fa-stack-1x"></i>
-                                                        </span><span class="fa-stack" style="width:1em">
-                                                            <i class="far fa-star fa-stack-1x"></i>
-                                                        </span><span class="fa-stack" style="width:1em">
-                                                            <i class="far fa-star fa-stack-1x"></i>
-                                                        </span><span class="fa-stack" style="width:1em">
-                                                            <i class="far fa-star fa-stack-1x"></i>
+                                                        <div class="flex gap-1">
+                                                            <span class="fa-stack" style="width:1em">
+                                                                <i class="far fa-star fa-stack-1x"></i>
+                                                            </span><span class="fa-stack" style="width:1em">
+                                                                <i class="far fa-star fa-stack-1x"></i>
+                                                            </span><span class="fa-stack" style="width:1em">
+                                                                <i class="far fa-star fa-stack-1x"></i>
+                                                            </span><span class="fa-stack" style="width:1em">
+                                                                <i class="far fa-star fa-stack-1x"></i>
+                                                            </span><span class="fa-stack" style="width:1em">
+                                                                <i class="far fa-star fa-stack-1x"></i>
+                                                            </span>
+                                                        </div>
+                                                        <span class="text-sm text-black whitespace-nowrap">(
+                                                            @if($user->review) {{ $user->review->vote_amount }} 
+                                                            @else 0
+                                                            stemmen)
+                                                            @endif
                                                         </span>
-
                                                     @endif
                                                 </div>
                                               </div>
@@ -192,7 +195,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>

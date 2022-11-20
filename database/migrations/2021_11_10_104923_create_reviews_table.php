@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('stars');
             $table->integer('vote_amount');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

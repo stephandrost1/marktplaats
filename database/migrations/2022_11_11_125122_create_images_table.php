@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('path');
             $table->unsignedBigInteger('advertisement_id')->nullable();
-            $table->foreign('advertisement_id')->references('id')->on('advertisements');
+            $table->foreign('advertisement_id')->references('id')->on('advertisements')->onDelete('cascade');
             $table->timestamps();
         });
     }

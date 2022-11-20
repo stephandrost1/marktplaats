@@ -18,8 +18,8 @@ return new class extends Migration
             $table->decimal('bid', 15, 2);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('advertisement_id')->nullable();
-            $table->foreign('advertisement_id')->references('id')->on('advertisements');
+            $table->unsignedBigInteger('advertisement_id')->nullable()->onDelete('cascade');
+            $table->foreign('advertisement_id')->references('id')->on('advertisements')->onDelete('cascade');
             $table->timestamps();
         });
     }

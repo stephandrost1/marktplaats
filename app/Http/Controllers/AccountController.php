@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertisement;
+use App\Models\Bid;
+use App\Models\Favorite;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
@@ -22,38 +27,6 @@ class AccountController extends Controller
         return view('profile', [
             'user' => User::findOrFail($id)
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -75,7 +48,6 @@ class AccountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -83,9 +55,17 @@ class AccountController extends Controller
         $user = Auth::user();
 
         if (!Hash::check($request->password, $user->password)) {
-            return Redirect::to('profiel-bewerken')->withErrors(['failed' => 'Wachtwoord is onjuist!']);
+            session()->flash('failedMsg', 'Het ingevoerde wachtwoord is onjuist');
+
+            return view('edit-profile', [
+                'user' => User::findOrFail($user->id)
+            ]);
         } else {
             $user = User::find($user->id);
+
+            if ($request->profile_image && File::exists(public_path('images/users/' . Auth::user()->path))) {
+                File::delete(public_path('images/users/' . Auth::user()->path));
+            }
 
             $user->update([
                 'first_name' => $request->first_name,
@@ -97,24 +77,35 @@ class AccountController extends Controller
                 'house_number' => $request->house_number,
             ]);
 
-            return Redirect::to('mijn-profiel')->withErrors(['succes' => 'Profiel is geüpdate!']);
+            if ($request->profile_image) {
+                $image = $request->file('profile_image');
+                $imageName = Auth::user()->first_name . '-' . Auth::user()->last_name . '.' . time() . '.' . $image->extension();
+                $image->move(public_path('images/users'), $imageName);
+
+                $user->update([
+                    'path' => $imageName,
+                ]);
+            }
+
+            session()->flash('succesMsg', 'Je profiel is succesvol geüpdate');
+            return redirect('mijn-profiel');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
         $user = User::find(Auth::user()->id);
 
         Auth::logout();
 
         if ($user->delete()) {
-            return view('advertisements')->with('succes', 'Account is verwijderd!');
+            session()->flash('succesMsg', 'Je account is succesvol verwijdert');
+            return redirect('/advertenties');
         }
     }
 }

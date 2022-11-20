@@ -69,6 +69,13 @@
         </h2>
     </x-slot>
 
+    {{-- @if(session()->has('succesMsg')) --}}
+        <x-succes-flash-message></x-succes-flash-message>
+    {{-- @endif --}}
+    @if(session()->has('failedMsg'))
+        <x-failed-flash-message></x-failed-flash-message>
+    @endif
+
     <div class="py-12 items-center flex flex-col gap-2">
         <div class="max-w-full xl:max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="w-11/12 min-[920px]:flex-row lg:w-5/5 m-auto flex flex-col gap-2">
@@ -128,7 +135,7 @@
                             <h1 class="text-3xl font-bold">{{ $advertisement->name }}</h1>
                             <h2 class="text-xl font-bold flex gap-3 items-center">
                                 €75,- 
-                                <span class="bg-[#F7F7F6] text-xs rounded-md p-1">Ophalen of verzenden</span>
+                                <span class="bg-[#F7F7F6] text-xs rounded-md p-1">{{ $advertisement->sending_type }}</span>
                             </h2>
                             <div class="flex flex-col gap-1">
                                 <p class="text-sm font-bold">Beschrijving</p>
@@ -165,28 +172,37 @@
                                         <img src="/images/users/{{ $advertisement->user->first_name }}-{{ $advertisement->user->last_name}}.jpg" class="w-16 h-16 rounded-full"/>
                                     </div>
                                     <div class="flex flex-col justify-center gap-1">
-                                        <div class="flex gap-3 items-center">
-                                            <h4 class="font-bold">{{ $advertisement->user->first_name }} {{ $advertisement->user->prefix_name}} {{ $advertisement->user->last_name}}</h4>
+                                        <div class="flex flex-col">
+                                            <h4 class="font-bold">
+                                                {{ $advertisement->user->first_name }} {{ $advertisement->user->prefix_name}} {{ $advertisement->user->last_name}}
+                                            </h4>
+                                            <h4 class="font-semibold text-sm">
+                                                {{ $advertisement->user->city }}, {{ $advertisement->user->postal_code }}
+                                            </h4>
+                                        </div>
 
-                                            <div class="flex gap-1 text-[#FFD700]">
-                                                @if ($advertisement->user->review)
-                                                    
-                                                    @foreach(range(1,5) as $i)
-                                                        <span class="fa-stack" style="width:1em">
-                                                            <i class="far fa-star fa-stack-1x"></i>
-                                                            @if($advertisement->user->review->stars > 0)
-                                                                @if($advertisement->user->review->stars >0.5)
-                                                                    <i class="fas fa-star fa-stack-1x"></i>
-                                                                @else
-                                                                    <i class="fas fa-star-half fa-stack-1x"></i>
-                                                                @endif
+                                        <div class="flex flex-row gap-1 items-center text-[#FFD700]">
+                                            @if ($advertisement->user->review)
+                                                
+                                            <div class="flex gap-1">
+                                                @foreach(range(1,5) as $i)
+                                                    <span class="fa-stack" style="width:1em">
+                                                        <i class="far fa-star fa-stack-1x"></i>
+                                                        @if($advertisement->user->review->stars > 0)
+                                                            @if($advertisement->user->review->stars >0.5)
+                                                                <i class="fas fa-star fa-stack-1x"></i>
+                                                            @else
+                                                                <i class="fas fa-star-half fa-stack-1x"></i>
                                                             @endif
-                                                            @php $advertisement->user->review->stars--; @endphp
-                                                        </span>
-                                                    @endforeach
-                                                 
-                                                @else
+                                                        @endif
+                                                        @php $advertisement->user->review->stars--; @endphp
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                                <span class="text-sm text-black whitespace-nowrap">({{ $advertisement->user->review->vote_amount }} stemmen)</span>
+                                            @else
 
+                                            <div class="flex gap-1">
                                                 <span class="fa-stack" style="width:1em">
                                                     <i class="far fa-star fa-stack-1x"></i>
                                                 </span><span class="fa-stack" style="width:1em">
@@ -198,14 +214,18 @@
                                                 </span><span class="fa-stack" style="width:1em">
                                                     <i class="far fa-star fa-stack-1x"></i>
                                                 </span>
-
-                                                @endif
-                                                
                                             </div>
+                                            <span class="text-sm text-black whitespace-nowrap">(
+                                                @if($advertisement->user->review) {{ $advertisement->user->review->vote_amount }} 
+                                                @else 0
+                                                stemmen)
+                                                @endif
+                                            </span>
+                                            @endif
+                                            
+                                            
+                                                
                                         </div>
-                                        
-                                        
-                                        <h4 class="font-semibold text-sm">{{ $advertisement->user->city }}, {{ $advertisement->user->postal_code }}</h4>
                                     </div>
                                 </div>
         

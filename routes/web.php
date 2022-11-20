@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\BidController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ownAdvertismentController;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ Route::get('/advertenties', [AdvertisementController::class, 'index'])->name('ad
 Route::post('/advertenties', [AdvertisementController::class, 'index']);
 
 Route::get('/detail/{id}', [AdvertisementController::class, 'show'])->name('detail');
-Route::post('/detail/{id}', [AdvertisementController::class, 'bid']);
+Route::post('/detail/{id}', [BidController::class, 'bid']);
 
 Route::get('/mijn-advertenties', [ownAdvertismentController::class, 'index'])->middleware('auth')->name('mijn-advertenties');
 
@@ -33,6 +34,7 @@ Route::get('/mijn-favorieten', [FavoriteController::class, 'index'])->middleware
 Route::post('/favorite', [FavoriteController::class, 'toggleFavorite']);
 
 Route::get('/mijn-profiel', [AccountController::class, 'index'])->middleware('auth')->name('mijn-profiel');
+Route::post('/mijn-profiel', [AccountController::class, 'destroy'])->middleware('auth');
 
 Route::get('/profiel-bewerken', [AccountController::class, 'edit'])->middleware('auth')->name('profiel-bewerken');
 Route::post('/profiel-bewerken', [AccountController::class, 'update'])->middleware('auth');

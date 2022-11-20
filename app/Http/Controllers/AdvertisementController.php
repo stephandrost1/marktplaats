@@ -103,20 +103,6 @@ class AdvertisementController extends Controller
 
     public function bid(Request $request, $id)
     {
-        $new_bid = $request->bidding_amount;
-        $highest_bid = Bid::all()->where('advertisement_id', $id)->sortByDesc('bid')->first();
-
-        if (!$highest_bid || $new_bid > $highest_bid->bid) {
-            Bid::create([
-                'bid' => $new_bid,
-                'user_id' => Auth::user()->id,
-                'advertisement_id' => $id,
-            ]);
-
-            return Redirect::to('detail/' . $id)->withErrors(['succes' => 'Bod geplaatst!']);
-        } else {
-            return Redirect::to('detail/' . $id)->withErrors(['failed' => 'Bod moet hoger zijn dan het hoogste huidige bod!']);
-        }
     }
 
     /**

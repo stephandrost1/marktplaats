@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('specification_name');
             $table->string('specification_value');
             $table->unsignedBigInteger('advertisement_id');
-            $table->foreign('advertisement_id')->references('id')->on('advertisements');
+            $table->foreign('advertisement_id')->references('id')->on('advertisements')->onDelete('cascade');
             $table->timestamps();
         });
     }

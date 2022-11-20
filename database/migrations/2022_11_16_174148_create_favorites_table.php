@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('advertisement_id')->nullable();
-            $table->foreign('advertisement_id')->references('id')->on('advertisements');
+            $table->foreign('advertisement_id')->references('id')->on('advertisements')->onDelete('cascade');
             $table->timestamps();
         });
     }

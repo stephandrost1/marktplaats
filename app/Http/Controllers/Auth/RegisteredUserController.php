@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $image = $request->file('profile_image');
-        $imageName = $request->first_name . '-' . $request->last_name . '.' . $image->extension();
+        $imageName = $request->first_name . '-' . $request->last_name . '.' . time() .  '.' . $image->extension();
         $image->move(public_path('images/users'), $imageName);
 
         $user = User::create([

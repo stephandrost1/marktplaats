@@ -5,6 +5,10 @@
         </h2>
     </x-slot>
 
+    @if(session()->has('succesMsg'))
+        <x-succes-flash-message></x-succes-flash-message>
+    @endif
+
     <form action="{{ route('advertenties') }}" method="POST">
         @csrf
 

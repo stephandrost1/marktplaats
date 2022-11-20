@@ -1,7 +1,3 @@
-<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script>
-
-<script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/index.js"></script>
-
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">

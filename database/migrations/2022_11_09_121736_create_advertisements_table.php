@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('description');
             $table->string('price');
             $table->enum('sending_type', ['Ophalen of verzenden', 'Ophalen', 'Verzenden']);
-            $table->$table->unsignedBigInteger('categorie_id')->nullable();
-            $table->foreign('categorie_id')->references('id')->on('categories');
+            $table->unsignedBigInteger('categorie_id')->nullable();
+            $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('page_views')->unsigned()->default(0);
             $table->timestamps();
         });
