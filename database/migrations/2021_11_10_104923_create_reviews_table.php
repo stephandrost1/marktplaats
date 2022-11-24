@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->integer('stars');
-            $table->integer('vote_amount');
+            $table->unsignedBigInteger('user_voted_id')->nullable();
+            $table->foreign('user_voted_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

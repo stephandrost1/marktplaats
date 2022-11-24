@@ -4,7 +4,11 @@
         <div class="flex justify-center relative rounded-lg overflow-hidden h-52">
           <div class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
             <div class="absolute inset-0 bg-black">
-              <img src="/images/advertisements/2/1.jpg">
+              
+              @foreach  ($advertisement->images as $image)
+                <img src="/images/advertisements/2/{{ $image->path }}">
+                @break
+              @endforeach
             </div>
           </div>
 

@@ -6,6 +6,7 @@ use App\Models\Advertisement;
 use App\Models\advertisementImage;
 use App\Models\Bid;
 use App\Models\Categorie;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -60,7 +61,11 @@ class AdvertisementController extends Controller
      */
     public function create()
     {
-        return view('create-advertisement');
+        $categories = Categorie::all();
+        
+        return view('create-advertisement', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -83,6 +88,14 @@ class AdvertisementController extends Controller
     public function show(Advertisement $advertisement, $id)
     {
         $advertisement = Advertisement::find($id);
+        $reviews = Review::where('user_id', $advertisement->user_id)->get();
+
+        $average_stars = 0;
+        foreach ($reviews as $review) {
+            $average_stars += $review->stars;
+        }
+
+        $average_stars = $average_stars / count($reviews);
 
         $favorites = array_map(function ($f) {
             return $f['user_id'];
@@ -96,13 +109,11 @@ class AdvertisementController extends Controller
         }
 
         return view('detail', [
+            'average_stars' => $average_stars,
+            'reviews' => $reviews,
             'advertisement' => $advertisement,
             'favorites' => $favorites,
         ]);
-    }
-
-    public function bid(Request $request, $id)
-    {
     }
 
     /**

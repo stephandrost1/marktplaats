@@ -60,9 +60,9 @@ class User extends Authenticatable
         return $this->hasMany(Favorite::class);
     }
 
-    public function review()
+    public function reviews()
     {
-        return $this->hasOne(Review::class);
+        return $this->hasMany(Review::class);
     }
 
     public function bids()

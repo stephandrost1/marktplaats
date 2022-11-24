@@ -3,16 +3,11 @@
     width: 100%;
     display: block;
     }
-    .img-display{
-        overflow: hidden;
-    }
+
     .img-showcase{
         display: flex;
         width: 100%;
         transition: all 0.5s ease;
-    }
-    .img-showcase img{
-        min-width: 100%;
     }
     .img-select{
         display: flex;
@@ -30,36 +25,40 @@
     }
 </style>
 
-<script>
-   function favorite() {
-
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-        }
-    });
-
-    $.ajax( {
-        url:'/favorite',
-        method:'POST',
-        data: {
-            ad_id: '{{ $advertisement->id}}',
-        },
-        success: function( updated ) { 
-            if( updated ) { 
-                $(".favorite-buttons").load(" .favorite-buttons > *");
-            }   
-        },  
-        fail: function() {
-            alert('NO');
-        }   
-    }); 
-    }
-
-
-</script>
-
 <x-app-layout>
+    <script>
+        $(document).ready(function(e)  {
+            $('.img-select img').on("click", function(){
+            $('#mainImage').attr('src', $(this).attr('src'));
+        });
+        });
+    
+       function favorite() {
+            
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            }
+        });
+    
+        $.ajax( {
+                url:'/favorite',
+                method:'POST',
+                data: {
+                    ad_id: '{{ $advertisement->id}}',
+                },
+                success: function( updated ) { 
+                    if( updated ) { 
+                        $(".favorite-buttons").load(" .favorite-buttons > *");
+                    }
+                },  
+                fail: function() {
+                    alert('NO');
+                }   
+            }); 
+        }
+    </script>
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Eigen advertenties') }}
@@ -86,27 +85,18 @@
                             </div>
                             <div class="img-display">
                                 <div class="img-showcase">
-                                  <img class="rounded-md" src="../images/advertisements/2/1.jpg">
-                                  <img class="rounded-md" src="../images/advertisements/2/2.jpg">
-                                  <img class="rounded-md" src="../images/advertisements/2/3.jpg">
+                                    @foreach  ($advertisement->images as $image)
+                                        <img id="mainImage" class="rounded-md block" src="../images/advertisements/2/{{ $image->path }}">
+                                    @break
+                                    @endforeach
                                 </div>
-                              </div>
-                              <div class="img-select">
-                                <div class="img-item">
-                                  <a href="#" data-id="1">
-                                    <img class="rounded-md" src="../images/advertisements/2/1.jpg">
-                                  </a>
                                 </div>
-                                <div class="img-item">
-                                  <a href="#" data-id="2">
-                                    <img class="rounded-md" src = "../images/advertisements/2/2.jpg">
-                                  </a>
-                                </div>
-                                <div class="img-item">
-                                  <a href="#" data-id="3">
-                                    <img class="rounded-md" src="../images/advertisements/2/3.jpg">
-                                  </a>
-                                </div>
+                                <div class="img-select">
+                                    @foreach  ($advertisement->images as $image)
+                                        <div class="img-item">
+                                            <img class="rounded-md preview cursor-pointer" src="../images/advertisements/2/{{ $image->path }}">
+                                        </div>
+                                    @endforeach
                               </div>
                         </div>
 
@@ -180,24 +170,24 @@
                                         </div>
 
                                         <div class="flex flex-row gap-1 items-center text-[#FFD700]">
-                                            @if ($advertisement->user->review)
+                                            @if ($average_stars)
                                                 
                                             <div class="flex gap-1">
                                                 @foreach(range(1,5) as $i)
                                                     <span class="fa-stack" style="width:1em">
                                                         <i class="far fa-star fa-stack-1x"></i>
-                                                        @if($advertisement->user->review->stars > 0)
-                                                            @if($advertisement->user->review->stars >0.5)
+                                                        @if($average_stars > 0)
+                                                            @if($average_stars >0.5)
                                                                 <i class="fas fa-star fa-stack-1x"></i>
                                                             @else
                                                                 <i class="fas fa-star-half fa-stack-1x"></i>
                                                             @endif
                                                         @endif
-                                                        @php $advertisement->user->review->stars--; @endphp
+                                                        @php $average_stars--; @endphp
                                                     </span>
                                                 @endforeach
                                             </div>
-                                                <span class="text-sm text-black whitespace-nowrap">({{ $advertisement->user->review->vote_amount }} stemmen)</span>
+                                                <span class="text-sm text-black whitespace-nowrap">({{count($reviews)}} stemmen)</span>
                                             @else
 
                                             <div class="flex gap-1">
@@ -213,11 +203,12 @@
                                                     <i class="far fa-star fa-stack-1x"></i>
                                                 </span>
                                             </div>
-                                            <span class="text-sm text-black whitespace-nowrap">(
-                                                @if($advertisement->user->review) {{ $advertisement->user->review->vote_amount }} 
-                                                @else 0
-                                                stemmen)
+                                            <span class="text-sm text-black whitespace-nowrap">
+                                                (
+                                                @if($advertisement->user->reviews){{count($reviews)}}
+                                                @else 0 
                                                 @endif
+                                                stemmen )
                                             </span>
                                             @endif
                                             
@@ -244,12 +235,12 @@
                     <form class="mt-2 mb-0" method="POST">
                         @csrf
                         <div class="mb-2 relative">        
-                            <x-text-input :disabled="!Auth::user() || $advertisement->id == Auth::user()->id" id="bidding_amount" name="bidding_amount" class="block pl-7 mt-1 w-full" type="text" required/>
+                            <x-text-input :disabled="!Auth::user() || $advertisement->user_id == Auth::user()->id" id="bidding_amount" name="bidding_amount" class="block pl-7 mt-1 w-full" type="number" required/>
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                 <span class="text-gray-500 sm:text-sm">€</span>
                             </div>
                         </div>
-                        <x-primary-button :disabled="!Auth::user() || $advertisement->id == Auth::user()->id" class="w-full whitespace-nowrap justify-center !bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0" type="submit">
+                        <x-primary-button :disabled="!Auth::user() || $advertisement->user_id == Auth::user()->id" class="w-full whitespace-nowrap justify-center !bg-[#EEA766] hover:!bg-[#f0b27b] focus:!bg-[#f0b27b] focus:!border-[#f0b27b] active:!bg-[#f0b27b] focus:ring-0" type="submit">
                             <i class="fas fa-gavel"></i>&nbsp;{{ __('Plaats bod') }}
                         </x-primary-button>
                         @if($errors->has('succes'))
